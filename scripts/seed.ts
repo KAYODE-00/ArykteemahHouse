@@ -2,6 +2,10 @@
 // Safe to run once after db:migrate. Skips products whose slug already exists.
 // Usage: npm run db:seed
 import { neon } from '@neondatabase/serverless';
+import { loadEnvConfig } from '@next/env';
+
+// `tsx` does not load Next.js .env.local files by itself.
+loadEnvConfig(process.cwd());
 import { products } from '../src/data/products';
 
 async function main() {

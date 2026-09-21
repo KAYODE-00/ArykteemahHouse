@@ -1,6 +1,10 @@
 // Creates all tables needed by the store. Safe to run multiple times.
 // Usage: npm run db:migrate   (requires DATABASE_URL in the environment)
 import { neon } from '@neondatabase/serverless';
+import { loadEnvConfig } from '@next/env';
+
+// `tsx` does not load Next.js .env.local files by itself.
+loadEnvConfig(process.cwd());
 
 async function main() {
   if (!process.env.DATABASE_URL) {
