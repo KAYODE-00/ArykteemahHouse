@@ -2,7 +2,8 @@ import { Product } from '@/types/product';
 import { ChatMessage } from '@/types/chat';
 import { formatMoney } from '@/lib/currency';
 
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+// Keep this aligned with a model enabled for the store's Groq account.
+const GROQ_MODEL = 'openai/gpt-oss-20b';
 
 // Anything that suggests the customer wants to talk price, payment, or a
 // deal that isn't already on the price tag — the AI should not be the one
