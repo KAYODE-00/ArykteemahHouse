@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
 import ProductImage from '@/components/ProductImage';
 import { FiLoader, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { formatMoney } from '@/lib/currency';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -21,40 +22,13 @@ export default function CheckoutPage() {
     }
   }, [items, router]);
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (items.length === 0) {
       setError('Your cart is empty');
       return;
     }
-
     setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ items }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create checkout session');
-      }
-
-      // Redirect to Stripe Checkout using the session URL
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error('No checkout URL received from server');
-      }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during checkout');
-      setLoading(false);
-    }
+    router.push('/checkout/pay');
   };
 
   if (items.length === 0) {
@@ -165,7 +139,7 @@ export default function CheckoutPage() {
                         </button>
                       </div>
                       <span className="text-sm font-semibold text-gray-900">
-                        ${(item.product.price * item.quantity).toFixed(2)}
+                        {formatMoney(item.product.price * item.quantity, item.product.currency)}
                       </span>
                     </div>
                   </div>
@@ -184,7 +158,7 @@ export default function CheckoutPage() {
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatMoney(total, items[0]?.product.currency ?? 'NGN')}</span>
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Shipping</span>
@@ -197,7 +171,7 @@ export default function CheckoutPage() {
               <div className="border-t border-gray-200 pt-4">
                 <div className="flex justify-between text-lg font-bold text-gray-900">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{formatMoney(total, items[0]?.product.currency ?? 'NGN')}</span>
                 </div>
               </div>
             </div>
@@ -216,7 +190,7 @@ export default function CheckoutPage() {
               {loading ? (
                 <>
                   <FiLoader className="w-5 h-5 animate-spin" />
-                  Processing...
+                  Loading...
                 </>
               ) : (
                 'Proceed to Payment'
@@ -224,7 +198,7 @@ export default function CheckoutPage() {
             </button>
 
             <p className="mt-4 text-xs text-center text-gray-500">
-              Secure payment powered by Stripe
+              Pay by bank transfer — you&apos;ll get our account details on the next step
             </p>
           </div>
         </div>

@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Acme Store</h3>
+            <h3 className="text-sm font-semibold text-gray-900">Arykteemah House</h3>
             <p className="mt-4 text-sm text-gray-600">
               Your one-stop shop for quality products.
             </p>
@@ -59,14 +59,14 @@ export default function Footer() {
                   Terms & Conditions
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/privacy"
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   Privacy Policy
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           <div>

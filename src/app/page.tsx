@@ -1,6 +1,8 @@
 import { Suspense } from 'react';
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
+import { getAllProducts } from '@/lib/db';
 import ProductGrid from '@/components/ProductGrid';
+import Hero from '@/components/Hero';
 
 interface HomeProps {
   searchParams: Promise<{ category?: string }>;
@@ -31,11 +33,23 @@ export default async function Home({ searchParams }: HomeProps) {
   const params = await searchParams;
   const category = params.category || 'all';
 
+  let products = staticProducts;
+  try {
+    const dbProducts = await getAllProducts();
+    if (dbProducts.length > 0) products = dbProducts;
+  } catch {
+    // DATABASE_URL not configured yet, or DB unreachable — show the
+    // starter catalog so the storefront never breaks.
+  }
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <Suspense fallback={<ProductGridFallback />}>
-        <ProductGrid products={products} initialCategory={category} />
-      </Suspense>
-    </div>
+    <>
+      <Hero featured={products.slice(0, 2)} />
+      <div id="collection" className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <Suspense fallback={<ProductGridFallback />}>
+          <ProductGrid products={products} initialCategory={category} />
+        </Suspense>
+      </div>
+    </>
   );
 }

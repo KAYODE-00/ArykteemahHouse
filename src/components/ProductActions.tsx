@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Product } from '@/types/product';
+import { useCart } from '@/contexts/CartContext';
 import ProductOptions from './ProductOptions';
 import AddToCartButton from './AddToCartButton';
 import ProductHighlights from './ProductHighlights';
@@ -11,6 +13,8 @@ interface ProductActionsProps {
 }
 
 export default function ProductActions({ product }: ProductActionsProps) {
+  const router = useRouter();
+  const { addToCart } = useCart();
   const [selectedColor, setSelectedColor] = useState<string | undefined>(
     product.colors?.[0]
   );
@@ -18,6 +22,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
     product.sizes?.[0]
   );
   const [quantity, setQuantity] = useState(1);
+
+  const handleBuyNow = () => {
+    addToCart(product, quantity, selectedColor, selectedSize);
+    router.push('/checkout/pay');
+  };
 
   const handleSelectionChange = (selections: {
     color?: string;
@@ -51,7 +60,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
           selectedSize={selectedSize}
           quantity={quantity}
         />
-        <button className="w-full rounded-lg border-2 border-gray-300 px-8 py-4 text-base font-semibold text-gray-900 transition-all duration-200 hover:border-gray-900 hover:bg-gray-50">
+        <button
+          onClick={handleBuyNow}
+          className="w-full rounded-lg border-2 border-gray-300 px-8 py-4 text-base font-semibold text-gray-900 transition-all duration-200 hover:border-gray-900 hover:bg-gray-50"
+        >
           Buy Now
         </button>
       </div>

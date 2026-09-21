@@ -34,6 +34,22 @@ export default function ProductImage({
     }
   };
 
+  // Uploaded product images are stored as base64 data URLs, which
+  // next/image's optimizer doesn't handle — fall back to a plain <img>.
+  if (imgSrc.startsWith('data:')) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return (
+      <img
+        src={imgSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        onError={handleError}
+      />
+    );
+  }
+
   return (
     <Image
       src={imgSrc}
@@ -42,6 +58,7 @@ export default function ProductImage({
       height={height}
       className={className}
       onError={handleError}
+      unoptimized={imgSrc.startsWith('http') && !imgSrc.includes('images.unsplash.com')}
     />
   );
 }

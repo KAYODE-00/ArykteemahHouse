@@ -4,6 +4,7 @@ import { useCart } from '@/contexts/CartContext';
 import { FiX, FiMinus, FiPlus, FiTrash2 } from 'react-icons/fi';
 import ProductImage from './ProductImage';
 import Link from 'next/link';
+import { formatMoney } from '@/lib/currency';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -156,7 +157,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-sm font-semibold text-gray-900">
-                            ${(item.product.price * item.quantity).toFixed(2)}
+                            {formatMoney(item.product.price * item.quantity, item.product.currency)}
                           </span>
                           <button
                             onClick={() =>
@@ -185,7 +186,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             <div className="border-t border-gray-200 p-6 space-y-4">
               <div className="flex items-center justify-between text-lg font-bold text-gray-900">
                 <span>Total:</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatMoney(total, items[0]?.product.currency ?? 'NGN')}</span>
               </div>
               <div className="space-y-2">
                 <Link

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Product } from '@/types/product';
 import ProductImage from './ProductImage';
+import { formatMoney } from '@/lib/currency';
 
 interface ProductCardProps {
   product: Product;
@@ -22,7 +23,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="mt-4">
         <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
         <p className="mt-1 text-sm font-semibold text-gray-900">
-          ${product.price.toFixed(2)} {product.currency}
+          {formatMoney(product.price, product.currency)}
         </p>
       </div>
     </Link>

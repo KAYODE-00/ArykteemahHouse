@@ -23,14 +23,14 @@ export interface HeaderProps {
 }
 
 export default function Header({
-  brand = 'Acme Store',
+  brand = 'Arykteemah House',
   brandHref = '/',
   navItems = [
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     { href: '/terms', label: 'Terms & Conditions' },
     { href: '/shipping', label: 'Shipping & Return Policy' },
-    { href: '/privacy', label: 'Privacy Policy' },
+    // { href: '/privacy', label: 'Privacy Policy' },
     { href: '/faq', label: 'FAQ' },
   ],
   showCart = true,

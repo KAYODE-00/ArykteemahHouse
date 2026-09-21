@@ -1,24 +1,29 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getProductBySlug, products } from '@/data/products';
+import { getProductBySlug, products as staticProducts } from '@/data/products';
+import { getAllProducts } from '@/lib/db';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import ProductActions from '@/components/ProductActions';
 import ProductDetailsTabs from '@/components/ProductDetailsTabs';
 import RelatedProducts from '@/components/RelatedProducts';
+import { formatMoney } from '@/lib/currency';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
-}
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+
+  let products = staticProducts;
+  try {
+    const dbProducts = await getAllProducts();
+    if (dbProducts.length > 0) products = dbProducts;
+  } catch {
+    // DATABASE_URL not configured yet, or DB unreachable — fall back below.
+  }
+
+  const product = products.find((p) => p.slug === slug) ?? getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -27,7 +32,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <>
       {/* Breadcrumb Navigation */}
-      <div className="bg-gray-50 border-b border-gray-200">
+      <div className="bg-gray-50 border-b border-gray-200 z-">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <nav className="flex items-center space-x-2 text-sm text-gray-600">
             <Link
@@ -85,7 +90,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           {/* Product Info */}
-          <div className="flex flex-col">
+          <div className="flex flex-col z-10 bg-white">
             {/* Product Title & Price */}
             <div className="mb-6">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight mb-4">
@@ -93,7 +98,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </h1>
               <div className="flex items-baseline gap-3">
                 <p className="text-4xl font-bold text-gray-900">
-                  ${product.price.toFixed(2)}
+                  {formatMoney(product.price, product.currency)}
                 </p>
                 <span className="text-lg font-normal text-gray-500">
                   {product.currency}
