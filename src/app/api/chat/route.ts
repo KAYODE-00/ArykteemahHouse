@@ -21,6 +21,9 @@ export async function GET(request: NextRequest) {
     const messages = await listChatMessages(sessionId);
     return NextResponse.json({ messages });
   } catch (error: any) {
+    if (error.message?.includes('DATABASE_URL is not set')) {
+      return NextResponse.json({ messages: [], unavailable: true });
+    }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -77,6 +80,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ reply: ai.reply, needsHuman });
   } catch (error: any) {
     console.error('Chat error:', error);
+    if (error.message?.includes('DATABASE_URL is not set')) {
+      return NextResponse.json({
+        reply: 'Our chat is temporarily offline. Please try again soon.',
+        needsHuman: true,
+      });
+    }
     return NextResponse.json({ error: error.message || 'Chat failed' }, { status: 500 });
   }
 }
