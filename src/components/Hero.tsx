@@ -15,7 +15,7 @@ export default function Hero({ featured }: HeroProps) {
         {/* Copy */}
         <div className="flex flex-col justify-center">
           <p className="text-sm font-medium tracking-wide text-[#2F4538]">
-            Arykteemah House
+            Arykteemah
           </p>
           <h1
             className="mt-4 font-[family-name:var(--font-fraunces)] text-5xl leading-[1.05] text-[#1B1B18] sm:text-6xl"

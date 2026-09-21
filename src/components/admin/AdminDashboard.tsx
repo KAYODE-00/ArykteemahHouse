@@ -34,7 +34,7 @@ export default function AdminDashboard() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <div>
             <p className="text-lg font-bold text-gray-900">Store admin</p>
-            <p className="text-xs text-gray-500">Arykteemah House</p>
+            <p className="text-xs text-gray-500">Arykteemah</p>
           </div>
           <button
             onClick={handleLogout}

@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
         className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-8 shadow-sm"
       >
         <h1 className="text-xl font-bold text-gray-900 mb-1">Admin sign in</h1>
-        <p className="text-sm text-gray-500 mb-6">Arykteemah House store admin</p>
+        <p className="text-sm text-gray-500 mb-6">Arykteemah store admin</p>
 
         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
         <input

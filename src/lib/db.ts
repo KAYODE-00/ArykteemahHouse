@@ -242,13 +242,13 @@ export type SiteContent = {
 export const DEFAULT_SITE_CONTENT: SiteContent = {
   about: {
     eyebrow: 'Our story', title: 'Made for the way you live.',
-    intro: 'Arykteemah House brings together considered everyday pieces and a warm, personal shopping experience.',
+    intro: 'Arykteemah brings together considered everyday pieces and a warm, personal shopping experience.',
     story: 'We believe the things you choose should feel useful, lasting, and distinctly yours. Our collection is selected with care so finding something you love feels simple.',
     values: ['Thoughtful selection', 'Quality you can feel', 'Service that feels personal'],
   },
   terms: {
     title: 'Terms & Conditions', updated: 'Last updated: January 2026',
-    intro: 'These terms explain how purchases from Arykteemah House work.',
+    intro: 'These terms explain how purchases from Arykteemah work.',
     sections: [
       { heading: 'Orders & payment', body: 'Orders are confirmed after we receive and verify payment. Please provide accurate contact and delivery details at checkout.' },
       { heading: 'Product information', body: 'We aim to keep product descriptions and images accurate. Colours may vary slightly depending on your screen.' },

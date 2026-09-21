@@ -23,7 +23,7 @@ export interface HeaderProps {
 }
 
 export default function Header({
-  brand = 'Arykteemah House',
+  brand = 'Arykteemah',
   brandHref = '/',
   navItems = [
     { href: '/', label: 'Home' },
@@ -122,4 +122,3 @@ export default function Header({
     </>
   );
 }
-

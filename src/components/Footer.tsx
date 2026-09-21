@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">Arykteemah House</h3>
+            <h3 className="text-sm font-semibold text-gray-900">Arykteemah</h3>
             <p className="mt-4 text-sm text-gray-600">
               Your one-stop shop for quality products.
             </p>
@@ -93,11 +93,10 @@ export default function Footer() {
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8">
           <p className="text-center text-sm text-gray-600">
-            © 2023-2025 ACME, Inc. All rights reserved.
+            © {new Date().getFullYear()} Arykteemah. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
   );
 }
-

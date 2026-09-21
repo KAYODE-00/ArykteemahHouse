@@ -22,7 +22,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "ArykteemahHouse",
+  title: "Arykteemah",
   description: "Your one-stop shop for quality products",
 };
 

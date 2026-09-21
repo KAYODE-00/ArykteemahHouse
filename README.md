@@ -1,6 +1,6 @@
-# Arykteemah House
+# Arykteemah
 
-Arykteemah House is a modern e-commerce storefront built with Next.js, TypeScript, and Stripe. It offers product browsing, search and filtering, a persistent cart, and secure checkout.
+Arykteemah is a modern e-commerce storefront built with Next.js and TypeScript.
 
 ## Features
 
@@ -52,4 +52,4 @@ Arykteemah House is a modern e-commerce storefront built with Next.js, TypeScrip
 
 ## Deployment
 
-Deploy Arykteemah House to a Next.js-compatible platform and configure the Stripe environment variables for the target environment.
+Deploy Arykteemah to a Next.js-compatible platform and configure its environment variables for the target environment.

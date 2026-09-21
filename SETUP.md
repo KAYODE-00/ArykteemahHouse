@@ -1,4 +1,4 @@
-# ArykteemahHouse — setup
+# Arykteemah — setup
 
 This build replaces Stripe with a bank-transfer + receipt flow, adds a Neon
 Postgres–backed product catalog, an admin dashboard, and a Groq-powered
