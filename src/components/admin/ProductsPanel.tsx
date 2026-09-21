@@ -13,6 +13,7 @@ type FormState = {
   category: string;
   slug: string;
   image: string;
+  images: string[];
   colors: string;
   sizes: string;
   stock: string;
@@ -26,6 +27,7 @@ const EMPTY_FORM: FormState = {
   category: '',
   slug: '',
   image: '',
+  images: [],
   colors: '',
   sizes: '',
   stock: '',
@@ -68,6 +70,7 @@ export default function ProductsPanel() {
       category: p.category,
       slug: p.slug,
       image: p.image,
+      images: p.images?.length ? p.images : [p.image],
       colors: (p.colors ?? []).join(', '),
       sizes: (p.sizes ?? []).join(', '),
       stock: p.stock !== undefined ? String(p.stock) : '',
@@ -75,11 +78,35 @@ export default function ProductsPanel() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleImageFile = async (file: File | null) => {
-    if (!file) return;
-    const dataUrl = await fileToDataUrl(file);
-    setForm((f) => ({ ...f, image: dataUrl }));
+  const addImageFiles = async (files: FileList | null) => {
+    if (!files?.length) return;
+    const dataUrls = await Promise.all(Array.from(files).map(fileToDataUrl));
+    setForm((f) => {
+      const images = [...f.images, ...dataUrls];
+      return { ...f, images, image: images[0] ?? '' };
+    });
   };
+
+  const addImageUrl = (url: string) => {
+    const image = url.trim();
+    if (!image) return;
+    setForm((f) => {
+      if (f.images.includes(image)) return f;
+      const images = [...f.images, image];
+      return { ...f, images, image: images[0] };
+    });
+  };
+
+  const removeImage = (index: number) => setForm((f) => {
+    const images = f.images.filter((_, imageIndex) => imageIndex !== index);
+    return { ...f, images, image: images[0] ?? '' };
+  });
+
+  const makePrimary = (index: number) => setForm((f) => {
+    const selected = f.images[index];
+    const images = [selected, ...f.images.filter((_, imageIndex) => imageIndex !== index)];
+    return { ...f, images, image: selected };
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,6 +121,7 @@ export default function ProductsPanel() {
         category: form.category,
         slug: form.slug,
         image: form.image,
+        images: form.images,
         colors: form.colors ? form.colors.split(',').map((c) => c.trim()).filter(Boolean) : [],
         sizes: form.sizes ? form.sizes.split(',').map((s) => s.trim()).filter(Boolean) : [],
         stock: form.stock,
@@ -198,23 +226,17 @@ export default function ProductsPanel() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Image</label>
+          <label className="block text-xs font-medium text-gray-600 mb-1">Product images</label>
+          <p className="mb-2 text-xs text-gray-500">Select several images at once. The first image is the main product image.</p>
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => handleImageFile(e.target.files?.[0] ?? null)}
+            multiple
+            onChange={(e) => { addImageFiles(e.target.files); e.currentTarget.value = ''; }}
             className="block w-full text-xs text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-gray-900 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white"
           />
-          <input
-            value={form.image.startsWith('data:') ? '' : form.image}
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-            placeholder="or paste an image URL"
-            className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          />
-          {form.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={form.image} alt="Preview" className="mt-2 h-20 w-20 rounded-md object-cover" />
-          )}
+          <div className="mt-2 flex gap-2"><input id="image-url" placeholder="or paste an image URL" className="min-w-0 flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm" /><button type="button" onClick={() => { const input = document.getElementById('image-url') as HTMLInputElement; addImageUrl(input.value); input.value = ''; }} className="rounded-md border border-gray-300 px-3 text-xs font-semibold text-gray-700">Add</button></div>
+          {form.images.length > 0 && <div className="mt-3 grid grid-cols-4 gap-2">{form.images.map((image, index) => <div key={`${image}-${index}`} className="relative"><button type="button" onClick={() => makePrimary(index)} title="Make main image" className={`block w-full overflow-hidden rounded-md border-2 ${index === 0 ? 'border-gray-900' : 'border-transparent'}`}><img src={image} alt={`Product preview ${index + 1}`} className="h-16 w-full object-cover" /></button><button type="button" onClick={() => removeImage(index)} aria-label={`Remove image ${index + 1}`} className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs text-white">×</button>{index === 0 && <span className="mt-1 block text-center text-[10px] font-semibold text-gray-600">Main</span>}</div>)}</div>}
         </div>
 
         <div className="grid grid-cols-2 gap-3">
